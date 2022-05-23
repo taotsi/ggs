@@ -9,7 +9,8 @@ namespace ggs
   {
   private:
     std::atomic<bool> done_{false};
-    static constexpr double max_fps_{0.5};
+    std::atomic<bool> paused_{false};
+    static constexpr double max_fps_{1};
     WorldState state_;
 
   public:
@@ -21,5 +22,7 @@ namespace ggs
   private:
 
     void process_commands();
+
+    void expect_resume_command();
   };
 }

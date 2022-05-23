@@ -8,7 +8,11 @@ int main()
   spdlog::set_level(spdlog::level::debug);
 
   ggs::WorldState state{};
-  state.add_cmd("dummy");
+  state.add_cmd("nop");
+  state.add_cmd("pause");
+  state.add_cmd("nop");
+  state.add_cmd("resume");
+  state.add_cmd("nop");
   state.add_cmd("stop");
 
   ggs::World w{state};
