@@ -3,7 +3,8 @@ if(NOT TARGET spdlog)
 endif()
 
 set(src_files
-  ${PROJECT_SOURCE_DIR}/src/ggs.cpp)
+  ${PROJECT_SOURCE_DIR}/src/world.cpp
+  ${PROJECT_SOURCE_DIR}/src/world_state.cpp)
 
 add_library(libggs STATIC "")
 
