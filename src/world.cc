@@ -1,7 +1,7 @@
 #include <thread>
 #include <iostream>
 #include <spdlog/spdlog.h>
-#include "world.hpp"
+#include "world.h"
 
 using namespace std::chrono_literals;
 

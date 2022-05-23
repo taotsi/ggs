@@ -1,5 +1,5 @@
 #include <string>
-#include "world_state.hpp"
+#include "world_state.h"
 
 namespace ggs
 {

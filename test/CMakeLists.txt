@@ -1,5 +1,5 @@
 set(test_src_files
-  ${PROJECT_SOURCE_DIR}/test/test_ggs.cpp)
+  ${PROJECT_SOURCE_DIR}/test/world_state_test.cpp)
 
 add_executable(testggs
   test_main.cpp

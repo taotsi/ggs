@@ -1,7 +1,6 @@
-#include <iostream>
 #include <spdlog/spdlog.h>
-#include "world.hpp"
-#include "world_state.hpp"
+#include "world.h"
+#include "world_state.h"
 
 int main()
 {
