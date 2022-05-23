@@ -1,7 +1,9 @@
 #pragma  once
+
 #include <utility>
 #include <atomic>
 #include "world_state.h"
+#include "command.h"
 
 namespace ggs
 {
@@ -11,18 +13,21 @@ namespace ggs
     std::atomic<bool> done_{false};
     std::atomic<bool> paused_{false};
     static constexpr double max_fps_{1};
+
     WorldState state_;
 
   public:
     World();
+
     explicit World(WorldState state);
 
     void loop();
 
   private:
+    std::vector<Command> collect_commands();
 
-    void process_commands();
+    void execute_commands(const std::vector<Command> &commands);
 
-    void expect_resume_command();
+    void execute_command(const Command &cmd);
   };
 }

@@ -1,16 +1,22 @@
 #pragma once
+
 #include <queue>
 #include <string>
+#include "agent.h"
+#include "command.h"
 
 namespace ggs
 {
   class WorldState
   {
   private:
-    std::queue<std::string> commands_;
     friend class World;
 
+    std::queue<std::vector<Command>> commands_;
+    std::vector<Agent> agents_;
+
   public:
-    void add_cmd(const std::string& cmd);
+    void add_command(const std::string &cmd);
+//    void add_commands(const std::vector<std::string> commands);
   };
 }

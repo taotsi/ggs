@@ -27,11 +27,8 @@ namespace ggs
     {
       const auto t0 = clock::now();
 
-      if (!paused_) {
-        process_commands();
-      } else {
-        expect_resume_command();
-      }
+      std::vector<Command> commands = collect_commands();
+      execute_commands(commands);
 
       const us t_elapsed = clock::now() - t0;
       std::this_thread::sleep_for(us{loop_duration_us - t_elapsed.count()});
@@ -40,41 +37,60 @@ namespace ggs
     spdlog::info("world loop stopped");
   }
 
-  void World::process_commands()
+  std::vector<Command> World::collect_commands()
   {
-    if (state_.commands_.empty())
+    std::vector<Command> result{};
+    if (!state_.commands_.empty())
     {
-      return;
+      const auto &command_strings = state_.commands_.front();
+      for (const auto &cmd_str: command_strings)
+      {
+        result.emplace_back(cmd_str);
+      }
+      state_.commands_.pop();
     }
-    const auto &cmd = state_.commands_.front();
-    state_.commands_.pop();
-    spdlog::debug("processing command: {}", cmd);
+    return result;
+  }
 
-    if (cmd == "stop")
+  void World::execute_commands(const std::vector<Command> &commands)
+  {
+    if (!paused_)
     {
-      done_ = true;
+      for (const auto &cmd: commands)
+      {
+        execute_command(cmd);
+      }
     }
-    else if (cmd == "pause")
+    else
     {
-      paused_ = true;
-      spdlog::info("paused");
+      spdlog::warn("being paused, commands in this round will be ignored");
+      for (auto it = commands.rbegin(); it != commands.rend(); it++)
+      {
+        if (it->cmd_ == "pause")
+        {
+          return;
+        }
+        if (it->cmd_ == "resume")
+        {
+          paused_ = false;
+          spdlog::info("resumed");
+        }
+      }
     }
   }
 
-  void World::expect_resume_command()
+  void World::execute_command(const Command &cmd)
   {
-    if (state_.commands_.empty())
-    {
-      return;
-    }
-    const auto &cmd = state_.commands_.front();
-    state_.commands_.pop();
+    spdlog::debug("processing cmd: {}", cmd.cmd_);
 
-    if (cmd == "resume") {
-      paused_ = false;
-      spdlog::info("resumed");
-    } else {
-      spdlog::debug("being paused, command ignored: {}", cmd);
+    if (cmd.cmd_ == "stop")
+    {
+      done_ = true;
+    }
+    else if (cmd.cmd_ == "pause")
+    {
+      paused_ = true;
+      spdlog::info("paused");
     }
   }
 }

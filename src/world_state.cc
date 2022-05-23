@@ -3,8 +3,8 @@
 
 namespace ggs
 {
-  void WorldState::add_cmd(const std::string &cmd)
+  void WorldState::add_command(const std::string &cmd)
   {
-    commands_.push(cmd);
+    commands_.push(std::vector<Command>{cmd});
   }
 }

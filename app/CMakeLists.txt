@@ -7,4 +7,4 @@ target_link_libraries(kilemal PRIVATE libggs)
 
 set_target_properties(kilemal
   PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
