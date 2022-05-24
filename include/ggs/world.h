@@ -4,6 +4,7 @@
 #include <atomic>
 #include "world_state.h"
 #include "command.h"
+#include "world_config.h"
 
 namespace ggs
 {
@@ -12,14 +13,15 @@ namespace ggs
   private:
     std::atomic<bool> done_{false};
     std::atomic<bool> paused_{false};
-    static constexpr double max_fps_{2};
-
+    WorldConfig config_;
     WorldState state_;
 
   public:
     World();
 
-    explicit World(WorldState state);
+    explicit World(const WorldConfig &config);
+
+    void load_state(const WorldState &state);
 
     void loop();
 
@@ -29,5 +31,9 @@ namespace ggs
     void execute_commands(const std::vector<Command> &commands);
 
     void execute_command(const Command &cmd);
+
+    void set_velocity(const std::vector<std::string> &operands);
+
+    void query_state();
   };
 }

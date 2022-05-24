@@ -7,4 +7,9 @@ namespace ggs
   {
     commands_.push(std::vector<Command>{Command{cmd}});
   }
+
+  void WorldState::add_agent(const Agent &agent)
+  {
+    agents_.insert(std::make_pair(agent.id(), agent));
+  }
 }

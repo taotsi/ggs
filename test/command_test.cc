@@ -10,6 +10,6 @@ TEST_CASE("op", "[op]")
   REQUIRE(cmd2.op() == ggs::Operator::STOP);
   ggs::Command cmd3{"SET_VELOCITY a 1 1"};
   REQUIRE(cmd3.op() == ggs::Operator::SET_VELOCITY);
-  const auto& operands3 = cmd3.operands();
+  const auto &operands3 = cmd3.operands();
   REQUIRE(operands3.size() == 3);
 }

@@ -7,8 +7,8 @@ using namespace std::chrono_literals;
 
 namespace ggs
 {
-  World::World(WorldState state)
-    : state_{std::move(state)}
+  World::World(const WorldConfig &config)
+    : config_{config}
   {}
 
   World::World() = default;
@@ -20,14 +20,14 @@ namespace ggs
 
     spdlog::info("world loop started");
 
-    static int loop_duration_us = 1'000'000 / max_fps_;
-    spdlog::info("max fps: {}, duration: {:.1f} ms", max_fps_, loop_duration_us / 1000.0);
+    auto loop_duration_us = static_cast<int>(1'000'000.0 / config_.max_fps());
+    spdlog::info("max fps: {}, duration: {:.1f} ms", config_.max_fps(), loop_duration_us / 1000.0);
 
     while (!done_)
     {
       const auto t0 = clock::now();
 
-      std::vector<Command> commands = collect_commands();
+      auto commands = collect_commands();
       execute_commands(commands);
 
       const us t_elapsed = clock::now() - t0;
@@ -66,11 +66,11 @@ namespace ggs
       spdlog::warn("being paused, commands in this round will be ignored");
       for (auto it = commands.rbegin(); it != commands.rend(); it++)
       {
-        if (it->op() == ggs::Operator::PAUSE)
+        if (it->op() == Operator::PAUSE)
         {
           return;
         }
-        if (it->op() == ggs::Operator::RESUME)
+        if (it->op() == Operator::RESUME)
         {
           paused_ = false;
           spdlog::info("resumed");
@@ -83,18 +83,56 @@ namespace ggs
   {
     spdlog::debug("processing cmd: {}", cmd.original_cmd());
 
-    if (cmd.op() == ggs::Operator::STOP)
+    if (cmd.op() == Operator::STOP)
     {
       done_ = true;
     }
-    else if (cmd.op() == ggs::Operator::PAUSE)
+    else if (cmd.op() == Operator::PAUSE)
     {
       paused_ = false;
       spdlog::info("paused");
     }
-    else if (cmd.op() == ggs::Operator::UNKNOWN)
+    else if (cmd.op() == Operator::SET_VELOCITY)
+    {
+      set_velocity(cmd.operands());
+    }
+    else if (cmd.op() == Operator::QUERY_STATE)
+    {
+      query_state();
+    }
+    else if (cmd.op() == Operator::UNKNOWN)
     {
       spdlog::warn("unknown command: {}", cmd.original_cmd());
     }
+  }
+
+  void World::load_state(const WorldState &state)
+  {
+    state_ = state;
+  }
+
+  void World::set_velocity(const std::vector<std::string> &operands)
+  {
+    const std::string &agent_id = operands[0];
+    if (state_.agents_.contains(agent_id))
+    {
+      auto &agent = state_.agents_[agent_id];
+      agent.vel(Vec2d{std::stod(operands[1]),
+                      std::stod(operands[2])});
+    }
+    else
+    {
+      spdlog::warn("agent {} not found", agent_id);
+    }
+  }
+
+  void World::query_state()
+  {
+    std::ostringstream oss{};
+    for (const auto &[_, agent]: state_.agents_)
+    {
+      oss << agent << ", ";
+    }
+    spdlog::debug(oss.str());
   }
 }

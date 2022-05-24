@@ -5,8 +5,10 @@ endif ()
 set(src_files
   ${PROJECT_SOURCE_DIR}/src/world.cc
   ${PROJECT_SOURCE_DIR}/src/world_state.cc
+  ${PROJECT_SOURCE_DIR}/src/world_config.cc
   ${PROJECT_SOURCE_DIR}/src/agent.cc
-  ${PROJECT_SOURCE_DIR}/src/command.cc)
+  ${PROJECT_SOURCE_DIR}/src/command.cc
+  ${PROJECT_SOURCE_DIR}/src/vec2d.cc)
 
 add_library(libggs STATIC "")
 

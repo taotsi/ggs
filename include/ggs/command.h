@@ -15,7 +15,7 @@ namespace ggs
     UNKNOWN
   };
 
-  std::ostream& operator<<(std::ostream &os, const Operator &token);
+  std::ostream &operator<<(std::ostream &os, const Operator &token);
 
   class Command
   {
@@ -30,7 +30,9 @@ namespace ggs
     explicit Command(const std::string &cmd_str);
 
     [[nodiscard]] Operator op() const;
-    [[nodiscard]] const std::vector<std::string>& operands() const;
+
+    [[nodiscard]] const std::vector<std::string> &operands() const;
+
     [[nodiscard]] std::string original_cmd() const;
 
   private:

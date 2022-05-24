@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <string>
+#include <unordered_map>
 #include "agent.h"
 #include "command.h"
 
@@ -13,10 +14,11 @@ namespace ggs
     friend class World;
 
     std::queue<std::vector<Command>> commands_;
-    std::vector<Agent> agents_;
+    std::unordered_map<std::string, Agent> agents_;
 
   public:
     void add_command(const std::string &cmd);
-//    void add_commands(const std::vector<std::string> commands);
+
+    void add_agent(const Agent &agent);
   };
 }

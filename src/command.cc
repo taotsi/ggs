@@ -5,7 +5,7 @@
 
 namespace ggs
 {
-  std::ostream& operator<<(std::ostream &os, const Operator &token)
+  std::ostream &operator<<(std::ostream &os, const Operator &token)
   {
     switch (token)
     {
@@ -38,11 +38,16 @@ namespace ggs
     std::string temp;
     getline(cmd_is, temp, SEPARATOR);
     op_ = string_to_op(temp);
-    if (op_ != Operator::UNKNOWN) {
-      while(getline(cmd_is, temp, SEPARATOR)) {
-        operands_.push_back(temp);
+    std::vector<std::string> operands;
+    if (op_ != Operator::UNKNOWN)
+    {
+      while (getline(cmd_is, temp, SEPARATOR))
+      {
+        operands.push_back(temp);
       }
     }
+    // TODO: check if operands are valid
+    operands_ = std::move(operands);
   }
 
   Operator Command::op() const
