@@ -1,4 +1,4 @@
-#include "agent.h"
+#include "ggs/agent.h"
 
 namespace ggs
 {

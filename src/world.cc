@@ -1,7 +1,7 @@
 #include <thread>
 #include <iostream>
 #include <spdlog/spdlog.h>
-#include "world.h"
+#include "ggs/world.h"
 
 using namespace std::chrono_literals;
 
@@ -66,11 +66,11 @@ namespace ggs
       spdlog::warn("being paused, commands in this round will be ignored");
       for (auto it = commands.rbegin(); it != commands.rend(); it++)
       {
-        if (it->cmd_ == "pause")
+        if (it->op() == ggs::Operator::PAUSE)
         {
           return;
         }
-        if (it->cmd_ == "resume")
+        if (it->op() == ggs::Operator::RESUME)
         {
           paused_ = false;
           spdlog::info("resumed");
@@ -81,16 +81,20 @@ namespace ggs
 
   void World::execute_command(const Command &cmd)
   {
-    spdlog::debug("processing cmd: {}", cmd.cmd_);
+    spdlog::debug("processing cmd: {}", cmd.original_cmd());
 
-    if (cmd.cmd_ == "stop")
+    if (cmd.op() == ggs::Operator::STOP)
     {
       done_ = true;
     }
-    else if (cmd.cmd_ == "pause")
+    else if (cmd.op() == ggs::Operator::PAUSE)
     {
-      paused_ = true;
+      paused_ = false;
       spdlog::info("paused");
+    }
+    else if (cmd.op() == ggs::Operator::UNKNOWN)
+    {
+      spdlog::warn("unknown command: {}", cmd.original_cmd());
     }
   }
 }

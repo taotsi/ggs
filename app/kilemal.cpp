@@ -1,18 +1,18 @@
 #include <spdlog/spdlog.h>
-#include "world.h"
-#include "world_state.h"
+#include "ggs/world.h"
+#include "ggs/world_state.h"
 
 int main()
 {
   spdlog::set_level(spdlog::level::debug);
 
   ggs::WorldState state{};
-  state.add_command("nop");
-  state.add_command("pause");
-  state.add_command("nop");
-  state.add_command("resume");
-  state.add_command("nop");
-  state.add_command("stop");
+  state.add_command("DUMMY");
+  state.add_command("PAUSE");
+  state.add_command("DUMMY");
+  state.add_command("RESUME");
+  state.add_command("DUMMY");
+  state.add_command("STOP");
 
   ggs::World w{state};
   w.loop();

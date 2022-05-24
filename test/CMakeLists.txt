@@ -1,8 +1,9 @@
 set(test_src_files
-  ${PROJECT_SOURCE_DIR}/test/world_state_test.cpp)
+  ${PROJECT_SOURCE_DIR}/test/world_state_test.cc
+  ${PROJECT_SOURCE_DIR}/test/command_test.cc)
 
 add_executable(testggs
-  test_main.cpp
+  test_main.cc
   ${test_src_files})
 
 target_include_directories(testggs PUBLIC ${include_dir})
